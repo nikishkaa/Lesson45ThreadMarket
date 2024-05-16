@@ -21,23 +21,20 @@ public class Producer implements Runnable {
 
     @Override
     public void run() {
-        int product = 1;
-
         while (running) {
-            synchronized (market) {
-                try {
-                    if (!market.isFlag()) {
-                        market.put(product);
-                        stream.println("Producer put product" + product++);
-                        market.setFlag(true);
-                        market.notify();
-                    } else {
-                        wait();
-                    }
-                } catch (InterruptedException exception) {
-                    stream.println(exception);
+
+            try {
+                    market.put(product);
+                    stream.println("Producer put product" + product++);
+                    market.setFlag(true);
+                    market.notify();
+                } else {
+                    wait();
                 }
+            } catch (InterruptedException exception) {
+                stream.println(exception);
             }
+
         }
     }
 

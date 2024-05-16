@@ -27,8 +27,8 @@ public class Consumer implements Runnable {
         while (running) {
             synchronized (market) {
                 if (market.isFlag()) {
-                    int product = market.get();
-                    stream.printf("Consumer %d use product %d.\n", id, product);
+//                    int product = market.get();
+//                    stream.printf("Consumer %d use product %d.\n", id, product);
                     market.setFlag(false);
                     notify();
                 } else {

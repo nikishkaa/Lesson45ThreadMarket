@@ -1,45 +1,33 @@
 package by.itstep.goutor.lesson45.model.logic;
 
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingDeque;
+
 public class Market {
-    private int product;
+    private BlockingDeque<Integer> blockingDeque;
     private volatile boolean flag;
 
 
     public Market() {
+        blockingDeque = new ArrayBlockingQueue<>(1);
     }
 
     public Market(int product) {
-        this.product = product;
-    }
-
-
-    public synchronized void get() {
         try {
-            if (flag) {
-                flag = false;
-                System.out.println("Consumer use product: " + product);
-                notify();
-                wait();
-            }
+            blockingDeque = new ArrayBlockingQueue<>(1);
+            blockingDeque.put(product);
         } catch (InterruptedException exception) {
             System.out.println(exception);
         }
     }
 
+
+    public synchronized int get() {
+        return blockingDeque.take();
+    }
+
     public synchronized void put(int product) {
-        try {
-            if (!flag) {
-                this.product = product;
-                System.out.println("Consumer use product: " + product);
-                flag = true;
-                notify();
-                wait();
-            }
-
-
-        } catch (InterruptedException exception) {
-            System.err.println(exception.getMessage());
-        }
+        blockingDeque.take();
 
     }
 
