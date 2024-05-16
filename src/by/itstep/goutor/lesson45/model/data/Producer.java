@@ -3,7 +3,6 @@ package by.itstep.goutor.lesson45.model.data;
 import by.itstep.goutor.lesson45.model.logic.Market;
 
 import java.io.PrintStream;
-import java.util.concurrent.TimeUnit;
 
 public class Producer implements Runnable {
     private volatile boolean running;
@@ -23,8 +22,22 @@ public class Producer implements Runnable {
     @Override
     public void run() {
         int product = 1;
+
         while (running) {
-           market.put(product++);
+            synchronized (market) {
+                try {
+                    if (!market.isFlag()) {
+                        market.put(product);
+                        stream.println("Producer put product" + product++);
+                        market.setFlag(true);
+                        market.notify();
+                    } else {
+                        wait();
+                    }
+                } catch (InterruptedException exception) {
+                    stream.println(exception);
+                }
+            }
         }
     }
 
