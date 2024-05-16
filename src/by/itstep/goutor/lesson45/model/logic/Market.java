@@ -38,7 +38,7 @@ public class Market {
 
 
         } catch (InterruptedException exception) {
-            System.out.println(exception);
+            System.err.println(exception);
         }
 
     }
