@@ -10,7 +10,7 @@ public class Consumer implements Runnable {
     private int id;
 
     private Thread thread;
-    private volatile boolean  running;
+    private volatile boolean running;
 
 
     public Consumer(Market market, PrintStream stream, int id) {
@@ -25,11 +25,7 @@ public class Consumer implements Runnable {
     @Override
     public void run() {
         while (running) {
-            if (market.isFlag()) {
-                int product = market.get();
-                stream.printf("Consumer %d use product %d.\n", id, product);
-                market.setFlag(false);
-            }
+            market.get();
         }
 
     }
